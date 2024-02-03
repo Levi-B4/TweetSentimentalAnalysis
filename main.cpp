@@ -5,10 +5,11 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
-    DSString trainDataFileName = "./dev-train-data.csv";
+    DSString trainDataFileName(argv[1]);
 
     TweetDataCleaner cleaner(trainDataFileName);
+
     cleaner.cleanFile();
 }

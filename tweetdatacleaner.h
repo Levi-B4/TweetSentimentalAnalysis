@@ -29,7 +29,7 @@ class TweetDataCleaner
         void stemWord(DSString* word) const;
 
         // outputs data to cleanFile
-        void saveCleanData();
+        void saveCleanData(std::ifstream& openFile) const;
 };
 
 #endif // TWEETDATACLEANER_H
