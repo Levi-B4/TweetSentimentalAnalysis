@@ -27,6 +27,47 @@ DSString::DSString(const DSString &other){
     data[other.size()] = '\0';
 }
 
+// returns the location of the passed char - parameters: const char searchChar
+int DSString::findChar(const char searchChar) const{
+    for(int i = 0; data[i] != '\0'; i++){
+        if(data[i] == searchChar){
+            return i;
+        }
+    }
+    return -1;
+}
+
+// returns the location of the numInstance instance of the passed char - parameters: const char searchChar, const int numInstance
+int DSString::findChar(const char searchChar, const int numInstance) const{
+
+    if(numInstance <= 0){
+        return -1;
+    }
+
+    int currentInstances = 0;
+    for(int i = 0; data[i] != '\0'; i++){
+        if(data[i] == searchChar){
+            currentInstances++;
+            if(currentInstances == numInstance){
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+void DSString::deleteIndex(const int index){
+    int newSize = size() - 1;
+    char* tempData = new char[newSize + 1];
+    tempData[newSize] = '\0';
+
+    std::memcpy(tempData, data, index);
+    std::strcpy(tempData + index, data + index + 1);
+
+    delete[] data;
+    data = tempData;
+}
+
 // default destructor
 DSString::~DSString() {
     delete[] data;
@@ -44,7 +85,7 @@ DSString& DSString::operator=(const char* data){
     return *this;
 }
 
-DSString& DSString::operator=(DSString& other){
+DSString& DSString::operator=(const DSString& other){
     delete[] data;
 
     data = new char[other.size() + 1];
@@ -72,12 +113,6 @@ DSString& DSString::operator+=(const char* data){
     return *this;
 }
 
-DSString& DSString::operator+=(DSString& other){
-    *this += other.c_str();
-
-    return *this;
-}
-
 DSString& DSString::operator+=(const char data){
     int oldSize = unsigned(strlen(this->data));
     char* oldData = this->data;
@@ -91,6 +126,30 @@ DSString& DSString::operator+=(const char data){
     this->data[oldSize + 1] = '\0';
 
     return *this;
+}
+
+DSString& DSString::operator+=(const DSString& other){
+    *this += other.c_str();
+
+    return *this;
+}
+
+DSString DSString::operator+(const char* data) const{
+    DSString result = *this;
+    result += data;
+    return result;
+}
+
+DSString DSString::operator+(const char data) const{
+    DSString result = *this;
+    result += data;
+    return result;
+}
+
+DSString DSString::operator+(const DSString& data) const{
+    DSString result = *this;
+    result += data;
+    return result;
 }
 
 /*
@@ -203,7 +262,7 @@ bool DSString::operator>=(const DSString& other) const{
     return false;
 }
 
-char& DSString::operator[](const int index){
+char& DSString::operator[](const int index) const{
     return data[index];
 }
 
@@ -212,7 +271,7 @@ int DSString::size() const{
 }
 
 // returns sub-string between the given indexes
-DSString DSString::substring(int startingIndex, int len){
+DSString DSString::substring(int startingIndex, int len) const{
     // TODO: throw outOfBounds exception for startingIndex < 0 || startingIndex > size() - 1
 
     // if len is 0 return empty string
@@ -229,6 +288,11 @@ DSString DSString::substring(int startingIndex, int len){
             startingIndex = 0;
         }
         len = endingIndex - startingIndex + 1;
+    } else{
+        // adjust len so that ending index is within string
+        if((startingIndex + len) > size()){
+            len = size() - startingIndex;
+        }
     }
 
     // if startingIndex is last index, return empty string
@@ -247,7 +311,22 @@ DSString DSString::substring(int startingIndex, int len){
     return output;
 }
 
-char* DSString::c_str(){
+// returns sub-string starting at the given index
+DSString DSString::substring(int startingIndex) const{
+    if(startingIndex > size() - 1){
+        return "";
+    }
+    char outputArray[size()];
+
+    memcpy(&outputArray, data + startingIndex, size());
+    outputArray[size() - 1] = '\0';
+
+    DSString output(outputArray);
+
+    return output;
+}
+
+char* DSString::c_str() const{
     return data;
 }
 
@@ -258,15 +337,38 @@ std::ostream& operator<<(std::ostream& stream, const DSString& theString){
 }
 
 std::istream& operator>>(std::istream& stream, DSString& theString){
-    char * tempChar = theString.data;
-    theString.data = new char[100];
-
     if(stream.good()){
-        while(!stream.eof()){
-            stream >> *theString.data;
+        // change data to empty string if no content
+        if(stream.eof()){
+            theString = "";
+            return stream;
         }
+
+        char tempChar;
+        char* tempArray = new char[999];
+        int currentIndex;
+
+        // itterate through each char of input adding to temp array
+        for(currentIndex = 0; !stream.eof(); currentIndex++){
+            stream.get(tempChar);
+            if(tempChar == '\r'){
+                continue;
+            }
+            if(tempChar == '\n'){
+                break;
+            }
+            tempArray[currentIndex] = tempChar;
+        }
+
+        delete[] theString.data;
+        theString.data = new char[currentIndex + 1];
+
+        /// copy temp array to data
+        memcpy(theString.data, tempArray, currentIndex);
+        theString.data[currentIndex] = '\0';
+
+        delete[] tempArray;
     }
 
-    delete[] tempChar;
     return stream;
 }

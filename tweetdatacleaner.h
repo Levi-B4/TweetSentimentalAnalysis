@@ -7,22 +7,29 @@
 class TweetDataCleaner
 {
     public:
+        // constructor - params: DSString dirtyFilePath
         TweetDataCleaner(DSString dirtyFilePath);
 
+        // intakes dirtyFile, processes data, outputs to cleanFile
         void cleanFile();
 
-        DSString getCleanFilePath();
-
+        // default destructor
         ~TweetDataCleaner();
 
     private:
-        DSVector<DSString*> tweets;
+        DSVector<DSString**> tweets;
         DSString dirtyFilePath;
         DSString cleanFilePath;
+        int TWEET_CHAR_LIMIT = 280;
 
-        void trimTweet(DSString* tweet);
-        void removeStopWords(DSString* tweet);
-        void wordStemming(DSString* tweet);
+        // returns true if word is in stop word list - params: const DSString& word
+        bool isStopWord(const DSString& word) const;
+
+        // removes unnecessary parts of words - params: DSString* word
+        void stemWord(DSString* word) const;
+
+        // outputs data to cleanFile
+        void saveCleanData();
 };
 
 #endif // TWEETDATACLEANER_H

@@ -7,6 +7,8 @@ using namespace std;
 
 int main()
 {
-    cout << "Hello World!" << endl;
-    return 0;
+    DSString trainDataFileName = "./dev-train-data.csv";
+
+    TweetDataCleaner cleaner(trainDataFileName);
+    cleaner.cleanFile();
 }

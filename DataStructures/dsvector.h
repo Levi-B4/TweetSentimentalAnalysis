@@ -4,72 +4,81 @@
 template <class T>
 class DSVector
 {
-    public:
-        //default constructor - params: int resizeIncrement = 5
-        DSVector(int resizeIncrement = 5);
+public:
+    //default constructor - params: int resizeIncrement = 5
+    DSVector(int resizeIncrement = 5);
 
-        // constructor - params: DSVector<T>& other
-        DSVector(const DSVector<T>& other);
+    // constructor - params: DSVector<T>& other
+    DSVector(const DSVector<T>& other);
 
-        // getter - numIndexes
-        int getNumIndexes();
+    // getter - numIndexes
+    int getNumIndexes();
 
-        // setter - capacity
-        void setCapacity(int capacity);
-        // getter - capacity
-        int getCapacity();
+    // setter - capacity
+    void setCapacity(int capacity);
+    // getter - capacity
+    int getCapacity();
 
-        // setter - resizeIncrement
-        void setResizeIncrement(int resizeIncrement);
-        // getter - resizeIncrement
-        int getResizeIncrement();
+    // setter - resizeIncrement
+    void setResizeIncrement(int resizeIncrement);
+    // getter - resizeIncrement
+    int getResizeIncrement();
 
-        // adds element to back of data array - params: T newElement
-        void pushBack(T newelement);
+    // adds element to back of data array - params: T newElement
+    void pushBack(T newelement);
 
-        // removes last element of data array
-        void removeLast();
+    // removes last element of data array
+    void removeLast();
 
-        // creates new vector with capacity equal to numIndexes
-        void shrink();
+    // creates new vector with capacity equal to numIndexes
+    void shrink();
 
-        // returns the first element of data array
-        T& front();
+    // deletes data and creates an empty array in its place
+    void clear();
 
-        // returns last element of data array
-        T& back();
+    // returns the first element of data array
+    T& front();
 
-        // returns pointer to first element of data
-        T* getData();
+    // returns last element of data array
+    T& back();
 
-
-        // sets this to the passed in vector - params: const DSVector<T>& other
-        DSVector<T>& operator=(const DSVector<T>& other);
-
-        // returns and adds passed in vector to the end of this - params: const DSVector<T>& other
-        DSVector<T>& operator+=(const DSVector<T>& other);
-
-        // returns this vector added to the passed in vector - params: const DSVector<T>& other
-        DSVector<T> operator+(const DSVector<T>& other) const;
+    // returns pointer to first element of data
+    T* getData();
 
 
-        // returns true if passed in vector has the same values as data - params: const DSVector<T>& other
-        bool operator==(const DSVector<T>& other) const;
+    // sets this to the passed in vector - params: const DSVector<T>& other
+    DSVector<T>& operator=(const DSVector<T>& other);
 
-        // returns true if passed in vector does not have the same values as data - params: const DSVector<T>& other
-        bool operator!=(const DSVector<T>& other) const;
+    // adds then returns passed in vector to the end of this - params: const DSVector<T>& other
+    DSVector<T>& operator+=(const DSVector<T>& other);
+    // adds then returns passed in element to the end of this - params: const T& element
+    DSVector<T>& operator+=(const T& element);
 
-        // returns the value at the passed in index - params: const int index
-        T operator[](const int index) const;
+    // returns this vector added to the passed in vector - params: const DSVector<T>& other
+    DSVector<T> operator+(const DSVector<T>& other) const;
+    // returns this vector added to the passed in element - params: const T& element
+    DSVector<T> operator+(const T& element) const;
 
-        // default destructor
-        ~DSVector();
 
-    private:
-        T* data;
-        int capacity;
-        int numIndexes;
-        int resizeIncrement;
+    // returns true if passed in vector has the same values as data - params: const DSVector<T>& other
+    bool operator==(const DSVector<T>& other) const;
+
+    // returns true if passed in vector does not have the same values as data - params: const DSVector<T>& other
+    bool operator!=(const DSVector<T>& other) const;
+
+
+    // returns the value at the passed in index - params: const int index
+    T operator[](const int index) const;
+
+
+    // default destructor
+    ~DSVector();
+
+private:
+    T* data;
+    int capacity;
+    int numIndexes;
+    int resizeIncrement;
 };
 
 // default constructor - params: int resizeIncrement = 5
@@ -104,6 +113,9 @@ int DSVector<T>::getNumIndexes(){
 // setter - capacity
 template <class T>
 void DSVector<T>::setCapacity(int capacity){
+    if(capacity < numIndexes){
+        capacity = numIndexes;
+    }
     this->capacity = capacity;
 
     //create new data with new capactity and delete old one
@@ -177,6 +189,16 @@ void DSVector<T>::shrink(){
     delete[] oldData;
 }
 
+// deletes data and creates an empty array in its place
+template <class T>
+void DSVector<T>::clear(){
+    delete[] data;
+
+    numIndexes = 0;
+
+    data = new T[capacity];
+}
+
 // returns the first element of data array
 template <class T>
 T& DSVector<T>::front(){
@@ -213,7 +235,7 @@ DSVector<T>& DSVector<T>::operator=(const DSVector<T>& other){
     return *this;
 }
 
-// returns and adds passed in vector to the end of this - params: const DSVector<T>& other
+// adds then returns passed in vector to the end of this - params: const DSVector<T>& other
 template <class T>
 DSVector<T>& DSVector<T>::operator+=(const DSVector<T>& other){
     int oldSize = numIndexes;
@@ -221,16 +243,10 @@ DSVector<T>& DSVector<T>::operator+=(const DSVector<T>& other){
 
     int newCap = numIndexes + resizeIncrement - (numIndexes % resizeIncrement);
 
-    if(capacity >= newCap){
-        for(int i = oldSize; i < numIndexes; i++){
-            data[i] = other.data[i - oldSize];
-        }
-    }
-    else {
+    if(capacity < newCap){
         capacity = newCap;
 
         T* oldData = data;
-        delete[] data;
 
         data = new T[newCap];
 
@@ -239,11 +255,31 @@ DSVector<T>& DSVector<T>::operator+=(const DSVector<T>& other){
         }
 
         delete[] oldData;
-
-        for(int i = oldSize; i < numIndexes; i++){
-            data[i] = other.data[i];
-        }
     }
+
+    for(int i = oldSize; i < numIndexes; i++){
+        data[i] = other.data[i - oldSize];
+    }
+
+    return *this;
+}
+
+// adds then returns passed in element to the end of this - params: const T& element
+template <class T>
+DSVector<T>& DSVector<T>::operator+=(const T& element){
+    if(capacity == numIndexes){
+        capacity += resizeIncrement;
+
+        T* oldData = data;
+
+        data = new T[capacity];
+        for(int i = 0; i < numIndexes; i++){
+            data[i] = oldData[i];
+        }
+        delete[] oldData;
+    }
+
+    data[numIndexes++] = element;
 
     return *this;
 }
@@ -253,6 +289,14 @@ template <class T>
 DSVector<T> DSVector<T>::operator+(const DSVector<T>& other) const{
     DSVector<T> result = *this;
     result += other;
+    return result;
+}
+
+// returns this vector added to the passed in element - params: const T& element
+template <class T>
+DSVector<T> DSVector<T>::operator+(const T& element) const{
+    DSVector<T> result = *this;
+    result += element;
     return result;
 }
 
