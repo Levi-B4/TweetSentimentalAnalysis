@@ -6,9 +6,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(TweetSentimentalAnalysis main.cpp
-    tweetdatacleaner.h tweetdatacleaner.cpp
-    DataStructures/dsvector.h
-    DataStructures/dsstring.h DataStructures/dsstring.cpp)
+    sentementalanalysis.cpp sentementalanalysis.h
+    DataStructures/dsstring.cpp DataStructures/dsstring.h
+    DataStructures/dsvector.h)
 
 include(GNUInstallDirs)
 install(TARGETS TweetSentimentalAnalysis

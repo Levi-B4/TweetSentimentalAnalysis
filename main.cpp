@@ -1,15 +1,16 @@
+#include "sentementalanalysis.h"
 #include <iostream>
-
-#include "tweetdatacleaner.h"
-#include "DataStructures/dsstring.h"
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int argc, char** argv)
 {
-    DSString trainDataFileName(argv[1]);
+    SentementalAnalysis sentA(argv);
 
-    TweetDataCleaner cleaner(trainDataFileName);
+    sentA.train();
 
-    cleaner.cleanFile();
+    sentA.test();
+
+
+    return 0;
 }

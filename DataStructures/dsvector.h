@@ -12,20 +12,20 @@ public:
     DSVector(const DSVector<T>& other);
 
     // getter - numIndexes
-    int getNumIndexes();
+    int getNumIndexes() const;
 
     // setter - capacity
-    void setCapacity(int capacity);
+    void setCapacity(const int capacity);
     // getter - capacity
-    int getCapacity();
+    int getCapacity() const;
 
     // setter - resizeIncrement
-    void setResizeIncrement(int resizeIncrement);
+    void setResizeIncrement(const int resizeIncrement);
     // getter - resizeIncrement
-    int getResizeIncrement();
+    int getResizeIncrement() const;
 
     // adds element to back of data array - params: T newElement
-    void pushBack(T newelement);
+    void pushBack(const T& newelement);
 
     // removes last element of data array
     void removeLast();
@@ -37,13 +37,13 @@ public:
     void clear();
 
     // returns the first element of data array
-    T& front();
+    T& front() const;
 
     // returns last element of data array
-    T& back();
+    T& back() const;
 
     // returns pointer to first element of data
-    T* getData();
+    T* getData() const;
 
 
     // sets this to the passed in vector - params: const DSVector<T>& other
@@ -106,17 +106,18 @@ DSVector<T>::DSVector(const DSVector<T>& other){
 
 // getter - numIndexes
 template <class T>
-int DSVector<T>::getNumIndexes(){
+int DSVector<T>::getNumIndexes() const{
     return numIndexes;
 }
 
 // setter - capacity
 template <class T>
-void DSVector<T>::setCapacity(int capacity){
+void DSVector<T>::setCapacity(const int capacity){
     if(capacity < numIndexes){
-        capacity = numIndexes;
+        this->capacity = numIndexes;
+    } else {
+        this->capacity = capacity;
     }
-    this->capacity = capacity;
 
     //create new data with new capactity and delete old one
     T* oldData = data;
@@ -131,26 +132,26 @@ void DSVector<T>::setCapacity(int capacity){
 
 // getter - capacity
 template <class T>
-int DSVector<T>::getCapacity(){
+int DSVector<T>::getCapacity() const{
     return capacity;
 }
 
 // setter - resizeIncrement (no data change till resize occurs)
 template <class T>
-void DSVector<T>::setResizeIncrement(int resizeIncrement){
+void DSVector<T>::setResizeIncrement(const int resizeIncrement){
     this->resizeIncrement = resizeIncrement;
 }
 
 // getter - resizeIncrement
 template <class T>
-int DSVector<T>::getResizeIncrement(){
+int DSVector<T>::getResizeIncrement() const{
     return resizeIncrement;
 }
 
 
 // adds element to back of data array - params: T newElement
 template <class T>
-void DSVector<T>::pushBack(T newElement){
+void DSVector<T>::pushBack(const T& newElement){
     // expand data if needed
     if(numIndexes == capacity){
         capacity = numIndexes + resizeIncrement - (numIndexes % resizeIncrement);
@@ -201,19 +202,19 @@ void DSVector<T>::clear(){
 
 // returns the first element of data array
 template <class T>
-T& DSVector<T>::front(){
+T& DSVector<T>::front() const{
     return data[0];
 }
 
 // returns last element of data arary
 template <class T>
-T& DSVector<T>::back(){
+T& DSVector<T>::back() const{
     return data[numIndexes - 1];
 }
 
 // returns pointer to first element of data
 template <class T>
-T* DSVector<T>::getData(){
+T* DSVector<T>::getData() const{
     return data;
 }
 
