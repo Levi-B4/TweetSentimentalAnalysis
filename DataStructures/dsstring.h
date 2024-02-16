@@ -18,41 +18,57 @@ public:
     // returns the location of the numInstance instance of the passed char - parameters: const char searchChar, const int numInstance
     int findChar(const char searchChar, const int numInstance) const;
 
+    // removes a char from the given index
     void deleteIndex(const int index);
 
     // default destructor
     ~DSString();
 
-    // assign operators
+    // assignment operator - params: const char* data
     DSString& operator=(const char* data);
+    // assignment operator - params: const DSString& other
     DSString& operator=(const DSString& other);
 
-    DSString& operator+=(const char* data);
-    DSString& operator+=(const char data);
-    DSString& operator+=( const DSString& other);
-
-    // concatination
+    // concatination operator - params: const char* data
     DSString operator+(const char* data) const;
+    // concatination operator - params: const char data
     DSString operator+(const char data) const;
+    // concatination operator - params: const DSString& data
     DSString operator+(const DSString& data) const;
 
-    // Comparison operators (check about making free functions instead)
+    // assign/concat operator - params: const char* data
+    DSString& operator+=(const char* data);
+    // assign/concat operator - params: const char data
+    DSString& operator+=(const char data);
+    // assign/concat operator - params: const DSString& other
+    DSString& operator+=( const DSString& other);
+
+    // Comparison operator - params: const char* other
     bool operator==(const char* other) const;
+    // Comparison operator - params: const DSString& other
     bool operator==(const DSString& other) const;
 
+    // less than operator - params: const char* other
     bool operator<(const char* other) const;
+    // less than operator - params: const DSString& other
     bool operator<(const DSString& other) const;
 
+    // greater than operator - params: const char* other
     bool operator>(const char* other) const;
+    // greater than operator - params: const DSString& other
     bool operator>(const DSString& other) const;
 
+    // less than or equal operator - params: const char* other
     bool operator<=(const char* other) const;
+    // less than or equal operator - params: const DSString& other
     bool operator<=(const DSString& other) const;
 
+    // greater than or equal operator - params: const char* other
     bool operator>=(const char* other) const;
+    // greater than or equal operator - params: const DSString& other
     bool operator>=(const DSString& other) const;
 
-    // index operator
+    // index operator - params: const int index
     char& operator[](const int index) const;
 
 
@@ -64,6 +80,7 @@ public:
     // returns sub-string starting at the given index
     DSString substring(int startingIndex) const;
 
+    // returns data cstring
     char* c_str() const;
 
     //TODO: Error: causes error with catch.hpp

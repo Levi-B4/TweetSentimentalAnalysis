@@ -1,16 +1,23 @@
 #include "sentementalanalysis.h"
 
+#include "DataStructures/dsstring.h"
+#include "DataStructures/dsvector.h"
+
 #include <iostream>
 #include <fstream>
 
-SentementalAnalysis::SentementalAnalysis(char** files) {
-    this->files = new DSString[5];
+SentementalAnalysis::SentementalAnalysis(char* trainData, char* trainTarget, char* testData, char* testTarget, char* outputFile) {
+    files[0] = trainData;
+    files[1] = trainTarget;
 
-    for(int i = 0; i < 5; i++){
-        this->files[i] = files[i];
-    }
+    files[2] = testData;
+    files[3] = testTarget;
 
-    loadDataFile(this->files[0]);
+    files[4] = outputFile;
+
+
+    loadDataFile(files[0]);
+
 
 }
 
@@ -23,12 +30,12 @@ void SentementalAnalysis::test(){
 }
 
 SentementalAnalysis::~SentementalAnalysis(){
-    delete[] files;
+
 }
 
 
 
 
-SentementalAnalysis::loadDataFile(DSString filePath){
+void SentementalAnalysis::loadDataFile(DSString filePath){
 
 }
