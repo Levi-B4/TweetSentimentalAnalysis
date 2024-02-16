@@ -16,8 +16,8 @@ jobs:
       ###   List them in the order that they need to appear in Argv param of main.
       ###   Output Files will follow input files
       ###   Note: These should be the actual names of the files.  No double quotes
-      INPUT_FILES: ###INSERT INPUT FILE NAMES
-      OUTPUT_FILES: ###INSERT OUTPUT FILE NAMES
+    INPUT_FILES: TestData/dev-train-data.csv TestData/dev-train-target.csv TestData/dev-test-data.csv TestData/dev-test-target.csv ###INSERT INPUT FILE NAMES
+      OUTPUT_FILES: TestData/results.csv ###INSERT OUTPUT FILE NAMES
       COMPILER: ${{matrix.config.compiler}}
       COMP: ${{matrix.config.comp}}
       CXXFLAGS: "-Werror"

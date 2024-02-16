@@ -3,14 +3,14 @@ project(TweetSentimentalAnalysis LANGUAGES CXX)
 set (EXE_NAME TweetSentimentalAnalysis)
 
 # input files
-set (input01 "TweetData/dev-train-data.csv")
-set (input02 "TweetData/dev-train-target.csv")
+set (input01 "TestData/dev-train-data.csv")
+set (input02 "TestData/dev-train-target.csv")
 
-set (input03 "TweetData/dev-test-data.csv")
-set (input04 "TweetData/dev-test-target.csv")
+set (input03 "TestData/dev-test-data.csv")
+set (input04 "TestData/dev-test-target.csv")
 
 # atually an output
-set (input05 "TweetData/results.csv")
+set (input05 "TestData/results.csv")
 
 # copy data files to build dir
 foreach(file IN LISTS input01 input02 input03 input04 input05)
